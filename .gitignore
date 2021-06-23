@@ -1,0 +1,4 @@
+build/
+dist/
+tests/
+kovol_language_tools.egg-info
