@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="kovol_language_tools",
-    version="0.0.1",
+    version="0.0.5",
     description="Classes and functions for manipulating data in the Kovol langauge of Papua New Guinea.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -25,6 +25,7 @@ setup(
     ],
     packages=["kovol_language_tools"],
     include_package_data=True,
-    install_requires=["tabulate",],
+    install_requires=[
+        "tabulate",
+    ],
 )
-

@@ -2,36 +2,17 @@
 
 import re
 
-consonants = [
-    "p",
-    "t",
-    "k",
-    "ʔ",
-    "b",
-    "d",
-    "g",
-    "m",
-    "n",
-    "ŋ",
-    "β",
-    "s",
-    "r",
-    "l",
-    "w",
-    "j",
-]
+from kovol_language_tools import facts
 
-# include both ɑ and a to catch spelling inconsistencies
-vowels = ["i", "ɪ", "e", "ɛ", "u", "o", "ɔ", "ɑ", "a"]
+valid_characters = (
+    facts.phonetic_consonants
+    + facts.phonetic_vowels
+    + facts.phonetic_glides
+    + facts.other_valid_characters
+)
+vv = re.compile("[{v}][{v}]".format(v="".join(facts.phonetic_vowels)))
 
-glides = ["ɑⁱ", "aⁱ", "eⁱ", "oᵘ"]
-
-other_valid_characters = [" "]
-
-valid_characters = consonants + vowels + glides + other_valid_characters
-vv = re.compile("[{v}][{v}]".format(v="".join(vowels)))
-
-ccc = re.compile("[{c}][{c}][{c}]".format(c="".join(consonants)))
+ccc = re.compile("[{c}][{c}][{c}]".format(c="".join(facts.phonetic_consonants)))
 
 
 def check_phonetic_inventory(string, hard_fail=True):
