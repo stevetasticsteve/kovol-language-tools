@@ -418,7 +418,7 @@ def get_data_from_csv(csv_file, format="object") -> list:
             file, delimiter=",", fieldnames=["actor", "tense", "mode", "kov", "eng"]
         )
         data = [r for r in reader]
-        if data[0][0] == "actor":
+        if "actor" in data[0]:
             data.pop(0)  # Remove header
 
     # Get a list of the unique verbs (identified by English translation)

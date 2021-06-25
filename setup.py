@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="kovol_language_tools",
-    version="0.0.5",
+    version="0.0.6",
     description="Classes and functions for manipulating data in the Kovol langauge of Papua New Guinea.",
     long_description=README,
     long_description_content_type="text/markdown",
