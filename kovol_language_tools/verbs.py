@@ -415,7 +415,7 @@ def get_data_from_csv(csv_file, format="object") -> list:
     Can accept 'list' as format to return a list of listed dict entries instead"""
     with open(csv_file, newline="") as file:
         reader = csv.DictReader(
-            file, delimiter=",", fieldnames=["actor", "tense", "mode", "kov", "eng"]
+            file, delimiter=",", fieldnames=["actor", "tense", "mode", "kov", "eng", "checked"]
         )
         data = [r for r in reader]
         if "actor" in data[0]:

@@ -1,4 +1,6 @@
 import pathlib
+import versioneer
+
 from setuptools import setup
 
 # The directory containing this file
@@ -10,7 +12,8 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="kovol_language_tools",
-    version="0.0.6",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     description="Classes and functions for manipulating data in the Kovol langauge of Papua New Guinea.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -27,5 +30,6 @@ setup(
     include_package_data=True,
     install_requires=[
         "tabulate",
+        "versioneer"
     ],
 )
