@@ -1,6 +1,5 @@
 build/
 dist/
-tests/
 kovol_language_tools.egg-info
 upload_pypi.md
 **__pycache__
