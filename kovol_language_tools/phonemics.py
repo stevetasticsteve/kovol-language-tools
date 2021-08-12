@@ -74,7 +74,7 @@ def check_phonetic_inventory(string, hard_fail=True):
 
 def interpret_phonetics(string, hard_fail=True):
     """Apply the interpretive decisions made in our phonemic write up to a
-    target string."""
+    target string. Return a string and any errors."""
     string = string.strip("[]")
     errors = check_phonetic_inventory(string, hard_fail=hard_fail)
 
