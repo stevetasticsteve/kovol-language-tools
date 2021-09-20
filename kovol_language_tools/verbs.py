@@ -254,9 +254,13 @@ class PredictedKovolVerb(KovolVerb):
         root = self.root  # variable to handle special rule changing the root
 
         # 1.
-        if root[-1] == "u":
+        # if root[-2:] == "um":
+        #     suffixes = ["gum", "gɔŋ", "ge", "guŋg", "guma", "gund"]
+        if root[-1] == "u" or root[-2:] == "um":
             # "u" causes assimilation
             suffixes = ["gum", "gɔŋ", "ge", "uŋg", "guma", "gund"]
+
+
         elif self.verb_vowels()[-1] == "i":
             # "i" causes assimilation, stretches over morpheme boundary
             suffixes = ["gɔm", "gɔŋ", "ge", "ɔŋg", "gima", "gɔnd"]
@@ -276,8 +280,9 @@ class PredictedKovolVerb(KovolVerb):
         # 2.
         if self.root_ending() == "C":
             # roots ending in C reduce
-            if root[-1] == "m":
+            if root[-1] == "m" and root[-2:] != "um":
                 # special rule, "m" assimilates to "ŋ"
+                # unless root ends in "um", then it doesn't
                 past_tense = [root[:-1] + "ŋ" + sfx for sfx in suffixes]
                 past_tense[3] = root + suffixes[3]  # "-ɔŋg" doesn't assimilate
             else:
@@ -308,12 +313,15 @@ class PredictedKovolVerb(KovolVerb):
         1. figure out suffixes to use
         2. add them to root."""
         # 1.
+
+        # 'u' in the root can cause assimilation
+        # if self.verb_vowels()[-1] == "u":
         if self.root[-1] == "u":
-            # "u" assimilates
+            # if the root ends in 'u' there is assimilation
             suffixes = ["um", "uŋ", "ut", "umuŋg", "umwa", "umind"]
-        elif self.root[-1] == "a":
-            # "a" assimilates
-            suffixes = ["am", "aŋ", "at", "amuŋg", "amwa", "amind"]
+        elif self.root[-2:] == "um":
+            # if the root ends in 'uC' there is weak assimilation
+            suffixes = ["um", "uŋ", "ut", "omuŋg", "omwa", "ɛmind"]
         else:
             # standard suffixes
             suffixes = ["ɔm", "ɔŋ", "ɔt", "omuŋg", "omwa", "ɛmind"]
