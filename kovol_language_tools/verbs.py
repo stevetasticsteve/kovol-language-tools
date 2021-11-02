@@ -10,6 +10,17 @@ class KovolVerb:
     """A class to represent a Kovol verb defining the conjugations of it as attributes with methods for retrieving
     those conjugations and printing to screen."""
 
+    vowels = (
+            "i",
+            "e",
+            "ɛ",
+            "a",
+            "ə",
+            "u",
+            "o",
+            "ɔ",
+      )  # Vowels in Kovol language
+
     def __init__(self, future1s: str, english: str):
         # Meta data
         self.kovol = future1s
@@ -49,6 +60,8 @@ class KovolVerb:
 
         # Other forms
         self.short = ""
+
+        
 
     def __str__(self):
         string = self.get_string_repr()
@@ -175,16 +188,6 @@ class PredictedKovolVerb(KovolVerb):
         )  # optionally pass through english parameter
         self.remote_past_1s = remote_past_1s
         self.recent_past_1s = recent_past_1s
-        self.vowels = [
-            "i",
-            "e",
-            "ɛ",
-            "a",
-            "ə",
-            "u",
-            "o",
-            "ɔ",
-        ]  # Vowels in Kovol language
 
         self.predict_root()
         self.predict_verb()
