@@ -3,3 +3,4 @@ dist/
 kovol_language_tools.egg-info
 upload_pypi.md
 **__pycache__
+verb_predict_cli.py

@@ -61,6 +61,21 @@ class KovolVerb:
     def get_string_repr(self) -> str:
         """Get an up to date string representation."""
         return {"future_1s": self.future_1s, "english": self.english}
+        
+        
+    def predict_root(self) -> str:
+        """Find the verb root by comparing remote past 1s and recent past 1s.
+        The root will be the longest string after stripping the suffix."""
+        remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
+        past_tns = self.recent_past_1s[0:-3]  # strip -gom
+
+        if len(past_tns) > len(remote_past_tense):
+            self.root = past_tns
+        elif len(past_tns) == len(remote_past_tense):
+            self.root = remote_past_tense
+        else:
+            self.root = remote_past_tense
+
 
     def get_remote_past_tense(self) -> tuple:
         """Return a tuple of remote past conjugations."""
@@ -165,7 +180,7 @@ class PredictedKovolVerb(KovolVerb):
             "ɔ",
         ]  # Vowels in Kovol language
 
-        self.root = self.predict_root()
+        self.predict_root()
         self.predict_verb()
 
     def __str__(self):
@@ -174,19 +189,6 @@ class PredictedKovolVerb(KovolVerb):
 
     def __repr__(self):
         return self.__str__()
-
-    def predict_root(self) -> str:
-        """Find the verb root by comparing remote past 1s and recent past 1s.
-        The root will be the longest string after stripping the suffix."""
-        remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
-        past_tns = self.recent_past_1s[0:-3]  # strip -gom
-
-        if len(past_tns) > len(remote_past_tense):
-            return past_tns
-        elif len(past_tns) == len(remote_past_tense):
-            return remote_past_tense
-        else:
-            return remote_past_tense
 
     def root_ending(self) -> str:
         """Returns whether the root ends in a Vowel "V" or Consonant "C".

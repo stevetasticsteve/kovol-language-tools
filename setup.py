@@ -28,8 +28,5 @@ setup(
     ],
     packages=["kovol_language_tools"],
     include_package_data=True,
-    install_requires=[
-        "tabulate",
-        "versioneer"
-    ],
+    install_requires=["tabulate", "versioneer"],
 )
