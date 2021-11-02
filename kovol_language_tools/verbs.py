@@ -76,6 +76,12 @@ class KovolVerb:
         else:
             self.root = remote_past_tense
 
+    def verb_vowels(self) -> str:
+            """Returns a string containing just the vowels of the root."""
+            v = [c for c in self.root if c in self.vowels]
+            v = "".join(v)
+            return v
+
 
     def get_remote_past_tense(self) -> tuple:
         """Return a tuple of remote past conjugations."""
@@ -197,12 +203,6 @@ class PredictedKovolVerb(KovolVerb):
             return "V"
         else:
             return "C"
-
-    def verb_vowels(self) -> str:
-        """Returns a string containing just the vowels."""
-        v = [c for c in self.root if c in self.vowels]
-        v = "".join(v)
-        return v
 
     def predict_verb(self) -> None:
         """A method to call all prediction methods together. Called during __init__."""
