@@ -457,13 +457,15 @@ def csv_data_to_verb_object(verb_data: list) -> list:
             if t["actor"].lower() == "1s":
                 v.future_1s = t["kov"]
             elif t["actor"].lower() == "2s":
-                v.future_2s = t["kov"]
+                if not t["mode"] == "imperative":
+                    v.future_2s = t["kov"]
             elif t["actor"].lower() == "3s":
                 v.future_3s = t["kov"]
             elif t["actor"].lower() == "1p":
                 v.future_1p = t["kov"]
             elif t["actor"].lower() == "2p":
-                v.future_2p = t["kov"]
+                if not t["mode"] == "imperative":
+                    v.future_2p = t["kov"]
             elif t["actor"].lower() == "3p":
                 v.future_3p = t["kov"]
 
@@ -505,6 +507,7 @@ def csv_data_to_verb_object(verb_data: list) -> list:
                 v.plural_imperative = t["kov"]
             elif t["mode"].lower() == "short":
                 v.short = t["kov"]
+
         verbs.append(v)
     verbs = sorted(verbs, key=lambda x: x.future_1s)
     return verbs
