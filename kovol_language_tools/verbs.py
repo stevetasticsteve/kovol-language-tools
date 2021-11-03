@@ -76,18 +76,21 @@ class KovolVerb:
         return {"future_1s": self.future_1s, "english": self.english}
         
         
-    def predict_root(self) -> str:
-        """Find the verb root by comparing remote past 1s and recent past 1s.
-        The root will be the longest string after stripping the suffix."""
-        remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
-        past_tns = self.recent_past_1s[0:-3]  # strip -gom
+    def predict_root(self, rules="steve") -> str:
+        """Find the verb root. Can take a keyword argument to change how it's predicted."""
 
-        if len(past_tns) > len(remote_past_tense):
-            self.root = past_tns
-        elif len(past_tns) == len(remote_past_tense):
-            self.root = remote_past_tense
+        if rules == "philip":
+            self.root = self.remote_past_3p[:-5]
         else:
-            self.root = remote_past_tense
+            remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
+            past_tns = self.recent_past_1s[0:-3]  # strip -gom
+
+            if len(past_tns) > len(remote_past_tense):
+                self.root = past_tns
+            elif len(past_tns) == len(remote_past_tense):
+                self.root = remote_past_tense
+            else:
+                self.root = remote_past_tense
 
     def verb_vowels(self) -> str:
             """Returns a string containing just the vowels of the root."""
