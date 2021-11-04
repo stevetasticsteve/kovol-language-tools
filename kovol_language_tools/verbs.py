@@ -428,6 +428,7 @@ class PredictedKovolVerb(KovolVerb):
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
     def __init__(self):
+        print("Hansen mode :)")
         super().__init__()
 
 
