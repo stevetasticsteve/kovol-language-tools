@@ -430,6 +430,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     def __init__(self, *args, **kwargs):
         print("Hansen mode :)")
         super().__init__(*args, **kwargs)
+        self.predict_root(rules="philip")
 
 
 def get_data_from_csv(csv_file, format="object") -> list:
