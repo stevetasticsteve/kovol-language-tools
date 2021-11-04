@@ -426,6 +426,11 @@ class PredictedKovolVerb(KovolVerb):
         return self.errors
 
 
+class HansenPredictedKovolVerb(PredictedKovolVerb):
+    def __init__(self):
+        super().__init__()
+
+
 def get_data_from_csv(csv_file, format="object") -> list:
     """reads a csv file and outputs a list of KovolVerb objects.
     Can accept 'list' as format to return a list of listed dict entries instead"""
