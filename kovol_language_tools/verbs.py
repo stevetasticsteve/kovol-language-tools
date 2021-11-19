@@ -521,7 +521,6 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     # Then we call the functions to predict the root and then the paradigms
     def __init__(self, remote_past_3p, english=""):
         super(PredictedKovolVerb, self).__init__(future1s="", english=english)
-        print("Hansen mode :)")
         self.remote_past_3p = remote_past_3p
         self.predict_root(rules="philip")
         self.predict_verb()
