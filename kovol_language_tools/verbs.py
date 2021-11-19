@@ -514,6 +514,7 @@ class PredictedKovolVerb(KovolVerb):
 
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
+    """Class to replace the standard method of predicting verbs with the Hansen alternative."""
     # init is constructor code that runs every time an object is created. Here we call the grandparent's init (KovolVerb), to build
     # everything from there (the super function).
     # We also redefine what a Hansen verb needs to be bult, we use 3PP.
@@ -550,6 +551,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         # Prediction based off 3PP, no need to predit it
 
     def predict_recent_past_tense(self):
+        # Placeholder values
         past_tense = range(0, 6)
         self.recent_past_1s = past_tense[0]
         self.recent_past_2s = past_tense[1]
@@ -559,6 +561,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         self.recent_past_3p = past_tense[5]
 
     def predict_future_tense(self):
+        # Placeholder values
         future_tense = range(0, 6)
         self.future_1s = future_tense[0]
         self.future_2s = future_tense[1]
