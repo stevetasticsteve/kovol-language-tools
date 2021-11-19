@@ -6,20 +6,112 @@ import csv
 from tabulate import tabulate
 
 
+def get_data_from_csv(csv_file, format="object") -> list:
+    """reads a csv file and outputs a list of KovolVerb objects.
+    Can accept 'list' as format to return a list of listed dict entries instead"""
+    with open(csv_file, newline="") as file:
+        reader = csv.DictReader(
+            file,
+            delimiter=",",
+            fieldnames=["actor", "tense", "mode", "kov", "eng", "checked"],
+        )
+        data = [r for r in reader]
+        if "actor" in data[0]:
+            data.pop(0)  # Remove header
+
+    # Get a list of the unique verbs (identified by English translation)
+    eng = set([v["eng"] for v in data])
+    # Get list of all data where each index is a list of dict items for each translation
+    verb_data = [[d for d in data if d["eng"] == e] for e in eng]
+
+    if format == "list":
+        return verb_data
+    elif format == "object":
+        return csv_data_to_verb_object(verb_data)
+
+
+def csv_data_to_verb_object(verb_data: list) -> list:
+    """Take a list of dicts representing a verb and return a list of Verb objects instead."""
+    verbs = []
+    for d in verb_data:
+        eng = d[0]["eng"]  # every row item contains this info
+        v = KovolVerb("", eng)  # init obj with temp 1s_future
+
+        future_tense = [v for v in d if v["tense"].lower() == "future"]
+        for t in future_tense:
+            if t["actor"].lower() == "1s":
+                v.future_1s = t["kov"]
+            elif t["actor"].lower() == "2s":
+                if not t["mode"] == "imperative":
+                    v.future_2s = t["kov"]
+            elif t["actor"].lower() == "3s":
+                v.future_3s = t["kov"]
+            elif t["actor"].lower() == "1p":
+                v.future_1p = t["kov"]
+            elif t["actor"].lower() == "2p":
+                if not t["mode"] == "imperative":
+                    v.future_2p = t["kov"]
+            elif t["actor"].lower() == "3p":
+                v.future_3p = t["kov"]
+
+        recent_past_tense = [v for v in d if v["tense"].lower() == "recent past"]
+        for t in recent_past_tense:
+            if t["actor"].lower() == "1s":
+                v.recent_past_1s = t["kov"]
+            elif t["actor"].lower() == "2s":
+                v.recent_past_2s = t["kov"]
+            elif t["actor"].lower() == "3s":
+                v.recent_past_3s = t["kov"]
+            elif t["actor"].lower() == "1p":
+                v.recent_past_1p = t["kov"]
+            elif t["actor"].lower() == "2p":
+                v.recent_past_2p = t["kov"]
+            elif t["actor"].lower() == "3p":
+                v.recent_past_3p = t["kov"]
+
+        remote_past_tense = [v for v in d if v["tense"].lower() == "remote past"]
+        for t in remote_past_tense:
+            if t["actor"].lower() == "1s":
+                v.remote_past_1s = t["kov"]
+            elif t["actor"].lower() == "2s":
+                v.remote_past_2s = t["kov"]
+            elif t["actor"].lower() == "3s":
+                v.remote_past_3s = t["kov"]
+            elif t["actor"].lower() == "1p":
+                v.remote_past_1p = t["kov"]
+            elif t["actor"].lower() == "2p":
+                v.remote_past_2p = t["kov"]
+            elif t["actor"].lower() == "3p":
+                v.remote_past_3p = t["kov"]
+
+        imperatives = [v for v in d if v["mode"]]
+        for t in imperatives:
+            if t["actor"].lower() == "2s":
+                v.singular_imperative = t["kov"]
+            elif t["actor"].lower() == "2p":
+                v.plural_imperative = t["kov"]
+            elif t["mode"].lower() == "short":
+                v.short = t["kov"]
+
+        verbs.append(v)
+    verbs = sorted(verbs, key=lambda x: x.future_1s)
+    return verbs
+
+
 class KovolVerb:
     """A class to represent a Kovol verb defining the conjugations of it as attributes with methods for retrieving
     those conjugations and printing to screen."""
 
     vowels = (
-            "i",
-            "e",
-            "ɛ",
-            "a",
-            "ə",
-            "u",
-            "o",
-            "ɔ",
-      )  # Vowels in Kovol language
+        "i",
+        "e",
+        "ɛ",
+        "a",
+        "ə",
+        "u",
+        "o",
+        "ɔ",
+    )  # Vowels in Kovol language
 
     def __init__(self, future1s: str, english: str):
         # Meta data
@@ -61,8 +153,6 @@ class KovolVerb:
         # Other forms
         self.short = ""
 
-        
-
     def __str__(self):
         string = self.get_string_repr()
         return f"Kovol verb: {string['future_1s']}, \"{string['english']}\""
@@ -74,8 +164,7 @@ class KovolVerb:
     def get_string_repr(self) -> str:
         """Get an up to date string representation."""
         return {"future_1s": self.future_1s, "english": self.english}
-        
-        
+
     def predict_root(self, rules="steve") -> str:
         """Find the verb root. Can take a keyword argument to change how it's predicted."""
 
@@ -93,11 +182,10 @@ class KovolVerb:
                 self.root = remote_past_tense
 
     def verb_vowels(self) -> str:
-            """Returns a string containing just the vowels of the root."""
-            v = [c for c in self.root if c in self.vowels]
-            v = "".join(v)
-            return v
-
+        """Returns a string containing just the vowels of the root."""
+        v = [c for c in self.root if c in self.vowels]
+        v = "".join(v)
+        return v
 
     def get_remote_past_tense(self) -> tuple:
         """Return a tuple of remote past conjugations."""
@@ -268,7 +356,6 @@ class PredictedKovolVerb(KovolVerb):
             # "u" causes assimilation
             suffixes = ["gum", "gɔŋ", "ge", "uŋg", "guma", "gund"]
 
-
         elif self.verb_vowels()[-1] == "i":
             # "i" causes assimilation, stretches over morpheme boundary
             suffixes = ["gɔm", "gɔŋ", "ge", "ɔŋg", "gima", "gɔnd"]
@@ -427,97 +514,59 @@ class PredictedKovolVerb(KovolVerb):
 
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
-    def __init__(self, *args, **kwargs):
+    # init is constructor code that runs every time an object is created. Here we call the grandparent's init (KovolVerb), to build
+    # everything from there (the super function).
+    # We also redefine what a Hansen verb needs to be bult, we use 3PP.
+    # Then we call the functions to predict the root and then the paradigms
+    def __init__(self, remote_past_3p, english=""):
+        super(PredictedKovolVerb, self).__init__(future1s="", english=english)
         print("Hansen mode :)")
-        super().__init__(*args, **kwargs)
+        self.remote_past_3p = remote_past_3p
         self.predict_root(rules="philip")
+        self.predict_verb()
 
+    def predict_remote_past(
+        self,
+    ):  # TODO inconsistent naming with tense, also parent class
+        root = self.root  # save a copy of the root so we can alter it
 
-def get_data_from_csv(csv_file, format="object") -> list:
-    """reads a csv file and outputs a list of KovolVerb objects.
-    Can accept 'list' as format to return a list of listed dict entries instead"""
-    with open(csv_file, newline="") as file:
-        reader = csv.DictReader(
-            file, delimiter=",", fieldnames=["actor", "tense", "mode", "kov", "eng", "checked"]
-        )
-        data = [r for r in reader]
-        if "actor" in data[0]:
-            data.pop(0)  # Remove header
+        suffixes = ["om", "oŋ", "ot", "omuŋg", "omwa", "ɛmind"]
 
-    # Get a list of the unique verbs (identified by English translation)
-    eng = set([v["eng"] for v in data])
-    # Get list of all data where each index is a list of dict items for each translation
-    verb_data = [[d for d in data if d["eng"] == e] for e in eng]
+        try:
+            if self.verb_vowels()[-1] == "ɛ":
+                root = root.replace("ɛ", "o")
+            if self.verb_vowels()[-1] == "u":
+                suffixes = ["um", "uŋ", "ut", "umuŋg", "umwa", "umind"]
+        except IndexError:
+            # Sometimes the root seems to be nothing: ɛnim, "to make".
+            # Python can crash attempting to do operations on nothing, try/except tells it what to do if it does crash (nothing)
+            pass
 
-    if format == "list":
-        return verb_data
-    elif format == "object":
-        return csv_data_to_verb_object(verb_data)
+        self.remote_past_1s = root + suffixes[0]
+        self.remote_past_2s = root + suffixes[1]
+        self.remote_past_3s = root + suffixes[2]
+        self.remote_past_1p = root + suffixes[3]
+        self.remote_past_2p = root + suffixes[4]
+        # Prediction based off 3PP, no need to predit it
 
+    def predict_recent_past_tense(self):
+        past_tense = range(0, 6)
+        self.recent_past_1s = past_tense[0]
+        self.recent_past_2s = past_tense[1]
+        self.recent_past_3s = past_tense[2]
+        self.recent_past_1p = past_tense[3]
+        self.recent_past_2p = past_tense[4]
+        self.recent_past_3p = past_tense[5]
 
-def csv_data_to_verb_object(verb_data: list) -> list:
-    """Take a list of dicts representing a verb and return a list of Verb objects instead."""
-    verbs = []
-    for d in verb_data:
-        eng = d[0]["eng"]  # every row item contains this info
-        v = KovolVerb("", eng)  # init obj with temp 1s_future
+    def predict_future_tense(self):
+        future_tense = range(0, 6)
+        self.future_1s = future_tense[0]
+        self.future_2s = future_tense[1]
+        self.future_3s = future_tense[2]
+        self.future_1p = future_tense[3]
+        self.future_2p = future_tense[4]
+        self.future_3p = future_tense[5]
 
-        future_tense = [v for v in d if v["tense"].lower() == "future"]
-        for t in future_tense:
-            if t["actor"].lower() == "1s":
-                v.future_1s = t["kov"]
-            elif t["actor"].lower() == "2s":
-                if not t["mode"] == "imperative":
-                    v.future_2s = t["kov"]
-            elif t["actor"].lower() == "3s":
-                v.future_3s = t["kov"]
-            elif t["actor"].lower() == "1p":
-                v.future_1p = t["kov"]
-            elif t["actor"].lower() == "2p":
-                if not t["mode"] == "imperative":
-                    v.future_2p = t["kov"]
-            elif t["actor"].lower() == "3p":
-                v.future_3p = t["kov"]
-
-        recent_past_tense = [v for v in d if v["tense"].lower() == "recent past"]
-        for t in recent_past_tense:
-            if t["actor"].lower() == "1s":
-                v.recent_past_1s = t["kov"]
-            elif t["actor"].lower() == "2s":
-                v.recent_past_2s = t["kov"]
-            elif t["actor"].lower() == "3s":
-                v.recent_past_3s = t["kov"]
-            elif t["actor"].lower() == "1p":
-                v.recent_past_1p = t["kov"]
-            elif t["actor"].lower() == "2p":
-                v.recent_past_2p = t["kov"]
-            elif t["actor"].lower() == "3p":
-                v.recent_past_3p = t["kov"]
-
-        remote_past_tense = [v for v in d if v["tense"].lower() == "remote past"]
-        for t in remote_past_tense:
-            if t["actor"].lower() == "1s":
-                v.remote_past_1s = t["kov"]
-            elif t["actor"].lower() == "2s":
-                v.remote_past_2s = t["kov"]
-            elif t["actor"].lower() == "3s":
-                v.remote_past_3s = t["kov"]
-            elif t["actor"].lower() == "1p":
-                v.remote_past_1p = t["kov"]
-            elif t["actor"].lower() == "2p":
-                v.remote_past_2p = t["kov"]
-            elif t["actor"].lower() == "3p":
-                v.remote_past_3p = t["kov"]
-
-        imperatives = [v for v in d if v["mode"]]
-        for t in imperatives:
-            if t["actor"].lower() == "2s":
-                v.singular_imperative = t["kov"]
-            elif t["actor"].lower() == "2p":
-                v.plural_imperative = t["kov"]
-            elif t["mode"].lower() == "short":
-                v.short = t["kov"]
-
-        verbs.append(v)
-    verbs = sorted(verbs, key=lambda x: x.future_1s)
-    return verbs
+    def predict_imperative(self) -> None:
+        self.singular_imperative = "WAM"
+        self.plural_imperative = "BAM"
