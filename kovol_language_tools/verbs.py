@@ -9,7 +9,7 @@ from tabulate import tabulate
 def get_data_from_csv(csv_file, format="object") -> list:
     """reads a csv file and outputs a list of KovolVerb objects.
     Can accept 'list' as format to return a list of listed dict entries instead"""
-    with open(csv_file, newline="") as file:
+    with open(csv_file, newline="", encoding="utf-8") as file:
         reader = csv.DictReader(
             file,
             delimiter=",",
