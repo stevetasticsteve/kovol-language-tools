@@ -317,7 +317,7 @@ class PredictedKovolVerb(KovolVerb):
         """A method to call all prediction methods together. Called during __init__."""
         self.predict_future_tense()
         self.predict_recent_past_tense()
-        self.predict_remote_past()
+        self.predict_remote_past_tense()
         self.predict_imperative()
 
     def predict_future_tense(self) -> None:
@@ -417,7 +417,7 @@ class PredictedKovolVerb(KovolVerb):
         self.recent_past_2p = past_tense[4]
         self.recent_past_3p = past_tense[5]
 
-    def predict_remote_past(self) -> None:
+    def predict_remote_past_tense(self) -> None:
         """Assign remote past tense attributes. Called during __init__.
         The two stages are:
         1. figure out suffixes to use
@@ -541,9 +541,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         self.predict_root(rules="philip")
         self.predict_verb()
 
-    def predict_remote_past(
-        self,
-    ):  # TODO inconsistent naming with tense, also parent class
+    def predict_remote_past_tense(self):
         root = self.root  # save a copy of the root so we can alter it
 
         suffixes = ["om", "oŋ", "ot", "omuŋg", "omwa", "ɛmind"]
