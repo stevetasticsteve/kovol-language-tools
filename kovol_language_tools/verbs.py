@@ -187,6 +187,21 @@ class KovolVerb:
         v = "".join(v)
         return v
 
+    def get_last_root_vowel(self) -> str or None:
+        """Returns last vowel of root, or None"""
+        v = self.verb_vowels()
+        if not v:
+            return None
+        else:
+            return v[-1]
+
+    def get_last_root_character(self) -> str or None:
+        """Returns last character of root, or None"""
+        try:
+            return self.root[-1]
+        except IndexError:
+            return None
+
     def get_remote_past_tense(self) -> tuple:
         """Return a tuple of remote past conjugations."""
         remote_past_tense = (
@@ -532,16 +547,11 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         root = self.root  # save a copy of the root so we can alter it
 
         suffixes = ["om", "oŋ", "ot", "omuŋg", "omwa", "ɛmind"]
-
-        try:
-            if self.verb_vowels()[-1] == "ɛ":
-                root = root.replace("ɛ", "o")
-            if self.verb_vowels()[-1] == "u":
-                suffixes = ["um", "uŋ", "ut", "umuŋg", "umwa", "umind"]
-        except IndexError:
-            # Sometimes the root seems to be nothing: ɛnim, "to make".
-            # Python can crash attempting to do operations on nothing, try/except tells it what to do if it does crash (nothing)
-            pass
+        last_vowel = self.get_last_root_vowel()
+        if last_vowel == "ɛ":
+            root = root.replace("ɛ", "o")
+        elif last_vowel == "u":
+            suffixes = ["um", "uŋ", "ut", "umuŋg", "umwa", "umind"]
 
         self.remote_past_1s = root + suffixes[0]
         self.remote_past_2s = root + suffixes[1]
@@ -559,18 +569,14 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
             "2p": "agama",
             "3p": "ogond",
         }
-        roots = { k:self.root for k in ["1s", "2s", "3s", "1p", "2p", "3p"] }
-        try:
-            last_vowel = self.verb_vowels()[-1]
-        except IndexError:
-            last_vowel = None
-        try:
-            last_character = self.root[-1]
-        except IndexError:
-            last_character = None
+        roots = {k: self.root for k in ["1s", "2s", "3s", "1p", "2p", "3p"]}
+        last_vowel = self.get_last_root_vowel()
+        last_character = self.get_last_root_character()
 
         if last_vowel == "ɛ":
-            roots["1s"] = roots["2s"] = roots["1p"] = roots["3p"] = self.root.replace("ɛ", "o")
+            roots["1s"] = roots["2s"] = roots["1p"] = roots["3p"] = self.root.replace(
+                "ɛ", "o"
+            )
             roots["2p"] = self.root.replace("ɛ", "a")
 
         elif last_vowel == "u":
@@ -593,20 +599,20 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
 
         if last_character == "m":
             if self.root[-2:] == "um" or self.root[-2:] == "ɛm":
-                suffixes = {k:v[1:] for (k,v) in suffixes.items()}
+                suffixes = {k: v[1:] for (k, v) in suffixes.items()}
                 suffixes["1p"] = "oŋg"
-                roots = {k:v[:-1] for (k,v) in roots.items()}
+                roots = {k: v[:-1] for (k, v) in roots.items()}
                 roots["1p"] = self.root
             elif self.root[-2] == "u" or self.root[-2] == "ɛ":
                 pass
             else:
-                roots = {k:v[:-1] + "ŋ" for (k,v) in roots.items()}
+                roots = {k: v[:-1] + "ŋ" for (k, v) in roots.items()}
                 roots["1p"] = self.root
-                suffixes = {k:v[1:] for (k,v) in suffixes.items()}
+                suffixes = {k: v[1:] for (k, v) in suffixes.items()}
                 suffixes["1p"] = "oŋg"
 
         elif last_character == "g":
-            suffixes = {k:v[2:] for (k,v) in suffixes.items()}
+            suffixes = {k: v[2:] for (k, v) in suffixes.items()}
             suffixes["1p"] = "oŋg"
 
         self.recent_past_1s = roots["1s"] + suffixes["1s"]
