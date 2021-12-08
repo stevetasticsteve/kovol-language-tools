@@ -551,8 +551,15 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         # Prediction based off 3PP, no need to predit it
 
     def predict_recent_past_tense(self):
-        suffixes = ["ogom", "ogoŋ", "ɛge", "oŋg", "agama", "ogond"]
-        root = self.root
+        suffixes = {
+            "1s": "ogom",
+            "2s": "ogoŋ",
+            "3s": "ɛge",
+            "1p": "oŋg",
+            "2p": "agama",
+            "3p": "ogond",
+        }
+        roots = { k:self.root for k in ["1s", "2s", "3s", "1p", "2p", "3p"] }
         try:
             last_vowel = self.verb_vowels()[-1]
         except IndexError:
@@ -563,58 +570,51 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
             last_character = None
 
         if last_vowel == "ɛ":
-            o_root = root.replace("ɛ", "o")
-            a_root = root.replace("ɛ", "a")
-
-            self.recent_past_1s = o_root + suffixes[0]
-            self.recent_past_2s = o_root + suffixes[1]
-            self.recent_past_3s = root + suffixes[2]
-            self.recent_past_1p = o_root + suffixes[3]
-            self.recent_past_2p = a_root + suffixes[4]
-            self.recent_past_3p = o_root + suffixes[5]
-            return
+            roots["1s"] = roots["2s"] = roots["1p"] = roots["3p"] = self.root.replace("ɛ", "o")
+            roots["2p"] = self.root.replace("ɛ", "a")
 
         elif last_vowel == "u":
-            suffixes = ["ugum", "ugoŋ", "uge", "uŋg", "uguma", "ugund"]
+            suffixes["1s"] = "ugum"
+            suffixes["2s"] = "ugoŋ"
+            suffixes["3s"] = "uge"
+            suffixes["1p"] = "uŋg"
+            suffixes["2p"] = "uguma"
+            suffixes["3p"] = "ugum"
             if last_character == "m":
-                suffixes[0] = "ogom"
+                suffixes["1s"] = "ogom"
+
         elif last_vowel == "i":
-            suffixes = ["igom", "igoŋ", "ige", "oŋg", "igima", "igond"]
+            suffixes["1s"] = "igom"
+            suffixes["2s"] = "igoŋ"
+            suffixes["3s"] = "ige"
+            suffixes["1p"] = "oŋg"
+            suffixes["2p"] = "igima"
+            suffixes["3p"] = "igond"
 
         if last_character == "m":
-            if root[-2:] == "um" or root[-2:] == "ɛm":
-                suffixes = [s[1:] for s in suffixes]
-                suffixes[3] = "oŋg"
-                self.recent_past_1s = root[:-1] + suffixes[0]
-                self.recent_past_2s = root[:-1] + suffixes[1]
-                self.recent_past_3s = root[:-1] + suffixes[2]
-                self.recent_past_1p = root + suffixes[3]
-                self.recent_past_2p = root[:-1] + suffixes[4]
-                self.recent_past_3p = root[:-1] + suffixes[5]
-                return
-            elif root[-2] == "u" or root[-2] == "ɛ":
+            if self.root[-2:] == "um" or self.root[-2:] == "ɛm":
+                suffixes = {k:v[1:] for (k,v) in suffixes.items()}
+                suffixes["1p"] = "oŋg"
+                roots = {k:v[:-1] for (k,v) in roots.items()}
+                roots["1p"] = self.root
+            elif self.root[-2] == "u" or self.root[-2] == "ɛ":
                 pass
             else:
-                ng_root = root[:-1] + "ŋ"
-                suffixes = [s[1:] for s in suffixes]
-                suffixes[3] = "oŋg"
-                self.recent_past_1s = ng_root + suffixes[0]
-                self.recent_past_2s = ng_root + suffixes[1]
-                self.recent_past_3s = ng_root + suffixes[2]
-                self.recent_past_1p = root + suffixes[3]
-                self.recent_past_2p = ng_root + suffixes[4]
-                self.recent_past_3p = ng_root + suffixes[5]
-                return
-        elif last_character == "g":
-            suffixes = [s[2:] for s in suffixes]
-            suffixes[3] = "oŋg"
+                roots = {k:v[:-1] + "ŋ" for (k,v) in roots.items()}
+                roots["1p"] = self.root
+                suffixes = {k:v[1:] for (k,v) in suffixes.items()}
+                suffixes["1p"] = "oŋg"
 
-        self.recent_past_1s = root + suffixes[0]
-        self.recent_past_2s = root + suffixes[1]
-        self.recent_past_3s = root + suffixes[2]
-        self.recent_past_1p = root + suffixes[3]
-        self.recent_past_2p = root + suffixes[4]
-        self.recent_past_3p = root + suffixes[5]
+        elif last_character == "g":
+            suffixes = {k:v[2:] for (k,v) in suffixes.items()}
+            suffixes["1p"] = "oŋg"
+
+        self.recent_past_1s = roots["1s"] + suffixes["1s"]
+        self.recent_past_2s = roots["2s"] + suffixes["2s"]
+        self.recent_past_3s = roots["3s"] + suffixes["3s"]
+        self.recent_past_1p = roots["1p"] + suffixes["1p"]
+        self.recent_past_2p = roots["2p"] + suffixes["2p"]
+        self.recent_past_3p = roots["3p"] + suffixes["3p"]
 
     def predict_future_tense(self):
         # Placeholder values
