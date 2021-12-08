@@ -67,4 +67,4 @@ Predictions generated from 3PP
 - if last vowel = "ɛ"
   - replace "ɛ" with "o" in root
 
-- **Result = root + suffix
+- **Result = root + suffix**
