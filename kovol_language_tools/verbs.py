@@ -515,6 +515,7 @@ class PredictedKovolVerb(KovolVerb):
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
     """Class to replace the standard method of predicting verbs with the Hansen alternative."""
+
     # init is constructor code that runs every time an object is created. Here we call the grandparent's init (KovolVerb), to build
     # everything from there (the super function).
     # We also redefine what a Hansen verb needs to be bult, we use 3PP.
@@ -550,14 +551,70 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         # Prediction based off 3PP, no need to predit it
 
     def predict_recent_past_tense(self):
-        # Placeholder values
-        past_tense = range(0, 6)
-        self.recent_past_1s = past_tense[0]
-        self.recent_past_2s = past_tense[1]
-        self.recent_past_3s = past_tense[2]
-        self.recent_past_1p = past_tense[3]
-        self.recent_past_2p = past_tense[4]
-        self.recent_past_3p = past_tense[5]
+        suffixes = ["ogom", "ogoŋ", "ɛge", "oŋg", "agama", "ogond"]
+        root = self.root
+        try:
+            last_vowel = self.verb_vowels()[-1]
+        except IndexError:
+            last_vowel = None
+        try:
+            last_character = self.root[-1]
+        except IndexError:
+            last_character = None
+
+        if last_vowel == "ɛ":
+            o_root = root.replace("ɛ", "o")
+            a_root = root.replace("ɛ", "a")
+
+            self.recent_past_1s = o_root + suffixes[0]
+            self.recent_past_2s = o_root + suffixes[1]
+            self.recent_past_3s = root + suffixes[2]
+            self.recent_past_1p = o_root + suffixes[3]
+            self.recent_past_2p = a_root + suffixes[4]
+            self.recent_past_3p = o_root + suffixes[5]
+            return
+
+        elif last_vowel == "u":
+            suffixes = ["ugum", "ugoŋ", "uge", "uŋg", "uguma", "ugund"]
+            if last_character == "m":
+                suffixes[0] = "ogom"
+        elif last_vowel == "i":
+            suffixes = ["igom", "igoŋ", "ige", "oŋg", "igima", "igond"]
+
+        if last_character == "m":
+            if root[-2:] == "um" or root[-2:] == "ɛm":
+                suffixes = [s[1:] for s in suffixes]
+                suffixes[3] = "oŋg"
+                self.recent_past_1s = root[:-1] + suffixes[0]
+                self.recent_past_2s = root[:-1] + suffixes[1]
+                self.recent_past_3s = root[:-1] + suffixes[2]
+                self.recent_past_1p = root + suffixes[3]
+                self.recent_past_2p = root[:-1] + suffixes[4]
+                self.recent_past_3p = root[:-1] + suffixes[5]
+                return
+            elif root[-2] == "u" or root[-2] == "ɛ":
+                pass
+            else:
+                ng_root = root[:-1] + "ŋ"
+                suffixes = [s[1:] for s in suffixes]
+                suffixes[3] = "oŋg"
+                self.recent_past_1s = ng_root + suffixes[0]
+                self.recent_past_2s = ng_root + suffixes[1]
+                self.recent_past_3s = ng_root + suffixes[2]
+                self.recent_past_1p = root + suffixes[3]
+                self.recent_past_2p = ng_root + suffixes[4]
+                self.recent_past_3p = ng_root + suffixes[5]
+                return
+        elif last_character == "g":
+            suffixes = [s[2:] for s in suffixes]
+            suffixes[3] = "oŋg"
+
+        self.recent_past_1s = root + suffixes[0]
+        self.recent_past_2s = root + suffixes[1]
+        self.recent_past_3s = root + suffixes[2]
+        self.recent_past_1p = root + suffixes[3]
+        self.recent_past_2p = root + suffixes[4]
+        self.recent_past_3p = root + suffixes[5]
 
     def predict_future_tense(self):
         # Placeholder values
