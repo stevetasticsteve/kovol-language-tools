@@ -544,18 +544,18 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     def predict_remote_past_tense(self):
         root = self.root  # save a copy of the root so we can alter it
 
-        suffixes = ["om", "oŋ", "ot", "omuŋg", "omwa", "ɛmind"]
+        suffixes = {"1s": "om", "2s": "oŋ", "3s": "ot", "1p": "omuŋg", "2p": "omwa", "3p": "ɛmind"}
         last_vowel = self.get_last_root_vowel()
         if last_vowel == "ɛ":
             root = root.replace("ɛ", "o")
         elif last_vowel == "u":
-            suffixes = ["um", "uŋ", "ut", "umuŋg", "umwa", "umind"]
+            suffixes = {k: v.replace("o", "u") for (k, v) in suffixes.items()}
 
-        self.remote_past_1s = root + suffixes[0]
-        self.remote_past_2s = root + suffixes[1]
-        self.remote_past_3s = root + suffixes[2]
-        self.remote_past_1p = root + suffixes[3]
-        self.remote_past_2p = root + suffixes[4]
+        self.remote_past_1s = root + suffixes["1s"]
+        self.remote_past_2s = root + suffixes["2s"]
+        self.remote_past_3s = root + suffixes["3s"]
+        self.remote_past_1p = root + suffixes["1p"]
+        self.remote_past_2p = root + suffixes["2p"]
         # Prediction based off 3PP, no need to predit it
 
     def predict_recent_past_tense(self):
@@ -591,7 +591,6 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
             suffixes["1s"] = "igom"
             suffixes["2s"] = "igoŋ"
             suffixes["3s"] = "ige"
-            suffixes["1p"] = "oŋg"
             suffixes["2p"] = "igima"
             suffixes["3p"] = "igond"
 
