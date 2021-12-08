@@ -544,7 +544,14 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     def predict_remote_past_tense(self):
         root = self.root  # save a copy of the root so we can alter it
 
-        suffixes = {"1s": "om", "2s": "oŋ", "3s": "ot", "1p": "omuŋg", "2p": "omwa", "3p": "ɛmind"}
+        suffixes = {
+            "1s": "om",
+            "2s": "oŋ",
+            "3s": "ot",
+            "1p": "omuŋg",
+            "2p": "omwa",
+            "3p": "ɛmind",
+        }
         last_vowel = self.get_last_root_vowel()
         if last_vowel == "ɛ":
             root = root.replace("ɛ", "o")
@@ -620,15 +627,37 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         self.recent_past_3p = roots["3p"] + suffixes["3p"]
 
     def predict_future_tense(self):
-        # Placeholder values
-        future_tense = range(0, 6)
-        self.future_1s = future_tense[0]
-        self.future_2s = future_tense[1]
-        self.future_3s = future_tense[2]
-        self.future_1p = future_tense[3]
-        self.future_2p = future_tense[4]
-        self.future_3p = future_tense[5]
+        suffixes = {
+            "1s": "ɛnim",
+            "2s": "ɛniŋ",
+            "3s": "iŋ",
+            "1p": "ug",
+            "2p": "wa",
+            "3p": "is",
+        }
+        roots = {k: self.root for k in ["1s", "2s", "3s", "1p", "2p", "3p"]}
 
-    def predict_imperative(self) -> None:
-        self.singular_imperative = "WAM"
-        self.plural_imperative = "BAM"
+        last_vowel = self.get_last_root_vowel()
+
+        if last_vowel == "i" or last_vowel == "u":
+            suffixes["1s"] = "inim"
+            suffixes["2s"] = "iniŋ"
+
+        elif last_vowel == "ɛ":
+            roots["1p"] = roots["2p"] = self.root.replace("ɛ", "o")
+
+        self.future_1s = roots["1s"] + suffixes["1s"]
+        self.future_2s = roots["2s"] + suffixes["2s"]
+        self.future_3s = roots["3s"] + suffixes["3s"]
+        self.future_1p = roots["1p"] + suffixes["1p"]
+        self.future_2p = roots["2p"] + suffixes["2p"]
+        self.future_3p = roots["3p"] + suffixes["3p"]
+
+    def predict_imperative(self):
+        suffixes = {"sing_imp": "ɛ", "pl_imp": "as"}
+        if self.get_last_root_vowel() == "ɛ":
+            root = self.root.replace("ɛ", "o")
+        else:
+            root = self.root
+        self.singular_imperative = root + suffixes["sing_imp"]
+        self.plural_imperative = root + suffixes["pl_imp"]
