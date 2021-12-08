@@ -590,7 +590,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
             suffixes["3s"] = "uge"
             suffixes["1p"] = "uŋg"
             suffixes["2p"] = "uguma"
-            suffixes["3p"] = "ugum"
+            suffixes["3p"] = "ugund"
             if last_character == "m":
                 suffixes["1s"] = "ogom"
 
