@@ -1,10 +1,10 @@
 # Hansen verb prediction
-Predictions generated from 3PP
+Predictions generated from 3PF
 
 ---
 
 ## predict_root
-- root =  3PP - "is"
+- root =  3PF - "is" or subtract "js"
 
 ---
 ## predict_remote_past_tense
@@ -13,6 +13,10 @@ Predictions generated from 3PP
   - replace "ɛ" in root with "o"
 - else if last vowel = "u"
   - suffixes = normal suffixes, but replace "o" with "u"
+
+- if last 2 characters are "ɛl" and are preceded by a syllable with "u"
+  - last 2 characters are "ul"
+  - suffixes = normal suffixes
 
 - **Result = root + suffix**
 
@@ -34,7 +38,10 @@ Predictions generated from 3PP
 - if last character = "m"
   - if last 2 characters of root = "um" or "ɛm"
     - short all suffixes by removing 1st character
-    - 1p suffix = "oŋg"
+    - if last 2 characters of root = "um"
+      - 1p suffix = "uŋg"
+    - if last 2 characters of root = "ɛm"
+      - 1p suffix = "oŋg"
   - else if penultimate character = "u" or "ɛ"
     - do nothing (avoids the else statement following this)
   - else
@@ -45,6 +52,15 @@ Predictions generated from 3PP
 - else if last character = "g"
   - shorten suffixes by removing first 2 characters
   - 1p suffix = "oŋg"
+
+- if last 2 characters are "ɛl"
+  - short suffixes 2 characters
+  - if preceded by "u" in previous syllable
+    - suffixes = "ugam", "ugoŋ", "uga", "aŋg", "uguma", "ugand"
+  - else 
+      - change "ɛ" to "a" in root for 1s, 3s, 1p, 2p, 3p
+      - change "ɛ" to "o" in root for 2s
+      - suffixes = "agam", "ogoŋ", "aga", "aŋg", "agama", "agand"
 
 - **Result = root + suffix**
 
@@ -57,6 +73,9 @@ Predictions generated from 3PP
   - 2s suffix = "iniŋ"
 - else if last vowel = "ɛ"
   - replace "ɛ" with "o" in 1p and 2p root
+- if last 2 characters are "ɛl"
+  - short suffixes 2 characters in 1s, 2s, 3s
+  - 3s suffix = "aŋ"
 
 - **Result = root + suffix**
 
@@ -65,6 +84,9 @@ Predictions generated from 3PP
 ## predict imperative
 - suffixes = "ɛ", "as"
 - if last vowel = "ɛ"
-  - replace "ɛ" with "o" in root
+  - replace "ɛ" with "a" in 2p root
+- if last character = "g"
+  - 2s suffix = "u"
+  - 2p suffix = "was"
 
 - **Result = root + suffix**
