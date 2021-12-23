@@ -71,6 +71,9 @@ Predictions generated from 3PF
 - if last vowel = "i" or "u"
   - 1s suffix = "inim"
   - 2s suffix = "iniŋ"
+- if last character = "m"
+  - 1s suffix = "inim"
+  - 2s suffix = "iniŋ"
 - else if last vowel = "ɛ"
   - replace "ɛ" with "o" in 1p and 2p root
 - if last 2 characters are "ɛl"
