@@ -169,7 +169,7 @@ class KovolVerb:
         """Find the verb root. Can take a keyword argument to change how it's predicted."""
 
         if rules == "philip":
-            self.root = self.remote_past_3p[:-5]
+            self.root = self.future_3p[:-2]
         else:
             remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
             past_tns = self.recent_past_1s[0:-3]  # strip -gom
