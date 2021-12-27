@@ -717,7 +717,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
 
     def predict_imperative(self):
         suffixes = {"sing_imp": "ɛ", "pl_imp": "as"}
-        root = self.root()
+        root = self.root
         if self.get_last_root_vowel() == "ɛ":
             root = root.replace("ɛ", "a")
         if self.get_last_root_character() == "g":
