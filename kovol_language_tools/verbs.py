@@ -695,11 +695,15 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         roots = {k: self.root for k in ["1s", "2s", "3s", "1p", "2p", "3p"]}
 
         last_vowel = self.get_last_root_vowel()
+        last_character = self.get_last_root_character()
 
-        if last_vowel == "i" or last_vowel == "u":
+        if last_vowel == "i" or last_vowel == "u" or last_character == "m":
             suffixes["1s"] = "inim"
             suffixes["2s"] = "iniŋ"
-
+        elif self.get_last_two_root_characters() == "ɛl":
+            suffixes["1s"] = suffixes["1s"][2:]
+            suffixes["2s"] = suffixes["2s"][2:]
+            suffixes["3s"] = "aŋ"
         elif last_vowel == "ɛ":
             roots["1p"] = roots["2p"] = self.root.replace("ɛ", "o")
 

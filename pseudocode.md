@@ -70,17 +70,15 @@ Predictions generated from 3PF
 
 ## predict_future_tense
 - suffixes = "ɛnim", "ɛniŋ", "iŋ", "ug", "wa", "is"
-- if last vowel = "i" or "u"
+- if last vowel = "i" or "u" or last character = "m"
   - 1s suffix = "inim"
   - 2s suffix = "iniŋ"
-- if last character = "m"
-  - 1s suffix = "inim"
-  - 2s suffix = "iniŋ"
+- elif last 2 characters are "ɛl"
+  - shorten suffixes by removing 2 initial characters in 1s, 2s
+  - 3s suffix = "aŋ"
 - elif last vowel = "ɛ"
   - replace "ɛ" with "o" in 1p and 2p root
-- if last 2 characters are "ɛl"
-  - short suffixes 2 characters in 1s, 2s, 3s
-  - 3s suffix = "aŋ"
+
 
 - **Result = root + suffix**
 
