@@ -11,12 +11,11 @@ Predictions generated from 3PF
 - suffixes = "om", "oŋ", "ot", "omuŋg", "omwa", "ɛmind"
 - if last vowel = "ɛ"
   - replace "ɛ" in root with "o"
+  - (exception) if last 2 characters = "ɛl" AND the preceding verb = "u"
+    - last 2 characters = "ul"
+    - suffixes = normal suffixes
 - else if last vowel = "u"
   - suffixes = normal suffixes, but replace "o" with "u"
-
-- if last 2 characters are "ɛl" and are preceded by a syllable with "u"
-  - last 2 characters are "ul"
-  - suffixes = normal suffixes
 
 - **Result = root + suffix**
 

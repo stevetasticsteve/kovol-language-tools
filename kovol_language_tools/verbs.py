@@ -187,6 +187,17 @@ class KovolVerb:
         v = "".join(v)
         return v
 
+    def get_vowel_n(self, n) -> str or None:
+        """Return the nth vowel, or None"""
+        v = self.verb_vowels()
+        if not v:
+            return None
+        else:
+            try:
+                return v[n]
+            except IndexError:
+                return None
+
     def get_last_root_vowel(self) -> str or None:
         """Returns last vowel of root, or None"""
         v = self.verb_vowels()
@@ -199,6 +210,13 @@ class KovolVerb:
         """Returns last character of root, or None"""
         try:
             return self.root[-1]
+        except IndexError:
+            return None
+
+    def get_last_two_root_characters(self) -> str or None:
+        """Returns the last two characters of the root, or None"""
+        try:
+            return self.root[-2:]
         except IndexError:
             return None
 
@@ -535,9 +553,9 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     # everything from there (the super function).
     # We also redefine what a Hansen verb needs to be bult, we use 3PP.
     # Then we call the functions to predict the root and then the paradigms
-    def __init__(self, remote_past_3p, english=""):
+    def __init__(self, future_3p, english=""):
         super(PredictedKovolVerb, self).__init__(future1s="", english=english)
-        self.remote_past_3p = remote_past_3p
+        self.future_3p = future_3p
         self.predict_root(rules="philip")
         self.predict_verb()
 
@@ -554,7 +572,10 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         }
         last_vowel = self.get_last_root_vowel()
         if last_vowel == "ɛ":
-            root = root.replace("ɛ", "o")
+            if self.get_last_two_root_characters() == "ɛl" and self.get_vowel_n(-2) == "u":
+                root = root.replace("ɛl", "ul")
+            else:
+                root = root.replace("ɛ", "o")
         elif last_vowel == "u":
             suffixes = {k: v.replace("o", "u") for (k, v) in suffixes.items()}
 
@@ -563,7 +584,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         self.remote_past_3s = root + suffixes["3s"]
         self.remote_past_1p = root + suffixes["1p"]
         self.remote_past_2p = root + suffixes["2p"]
-        # Prediction based off 3PP, no need to predit it
+        self.remote_past_3p = root + suffixes["3p"]
 
     def predict_recent_past_tense(self):
         suffixes = {
@@ -651,7 +672,8 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         self.future_3s = roots["3s"] + suffixes["3s"]
         self.future_1p = roots["1p"] + suffixes["1p"]
         self.future_2p = roots["2p"] + suffixes["2p"]
-        self.future_3p = roots["3p"] + suffixes["3p"]
+        # self.future_3p = roots["3p"] + suffixes["3p"]
+        # 3PF given as starting data
 
     def predict_imperative(self):
         suffixes = {"sing_imp": "ɛ", "pl_imp": "as"}
