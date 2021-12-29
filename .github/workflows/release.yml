@@ -18,6 +18,9 @@ jobs:
       - name: Install build dependencies
         run: python -m pip install build wheel
 
+      - name: Install pip modules
+        run: pip3 install -r requirements.txt
+
       - name: Install pytest
         run: python -m pip install pytest
 
