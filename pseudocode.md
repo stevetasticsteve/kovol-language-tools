@@ -26,7 +26,7 @@ Predictions generated from 3PF
   
 - if last vowel = "ɛ"
   - if last 2 characters are "ɛl"
-    - shorten suffixes by removing first 2 characters
+    - shorten root by removing first 2 characters
     - if preceded by "u" in previous syllable
       - suffixes = "ugam", "ugoŋ", "uga", "aŋg", "uguma", "ugand"
     - else 

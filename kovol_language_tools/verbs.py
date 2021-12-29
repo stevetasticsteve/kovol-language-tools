@@ -548,11 +548,6 @@ class PredictedKovolVerb(KovolVerb):
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
     """Class to replace the standard method of predicting verbs with the Hansen alternative."""
-
-    # init is constructor code that runs every time an object is created. Here we call the grandparent's init (KovolVerb), to build
-    # everything from there (the super function).
-    # We also redefine what a Hansen verb needs to be bult, we use 3PP.
-    # Then we call the functions to predict the root and then the paradigms
     def __init__(self, future_3p, english=""):
         super(PredictedKovolVerb, self).__init__(future1s="", english=english)
         self.future_3p = future_3p
@@ -604,8 +599,8 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
 
         if last_vowel == "ɛ":
             if self.get_last_two_root_characters() == "ɛl":
-                # shorten suffix by two
-                suffixes = {k: v[2:] for (k, v) in suffixes.items()}
+                # shorten root by two
+                roots = {k: v[:-2] for (k, v) in roots.items()}
                 if self.get_vowel_n(-2) == "u":
                     suffixes = {
                         "1s": "ugam",
