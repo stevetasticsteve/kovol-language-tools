@@ -5,6 +5,8 @@ import csv
 
 from tabulate import tabulate
 
+from kovol_language_tools.facts import phonetic_vowels
+
 
 def get_data_from_csv(csv_file, format="object") -> list:
     """reads a csv file and outputs a list of KovolVerb objects.
@@ -102,16 +104,7 @@ class KovolVerb:
     """A class to represent a Kovol verb defining the conjugations of it as attributes with methods for retrieving
     those conjugations and printing to screen."""
 
-    vowels = (
-        "i",
-        "e",
-        "ɛ",
-        "a",
-        "ə",
-        "u",
-        "o",
-        "ɔ",
-    )  # Vowels in Kovol language
+    vowels = phonetic_vowels  # Vowels in Kovol language
 
     def __init__(self, future1s: str, english: str):
         # Meta data
@@ -548,6 +541,7 @@ class PredictedKovolVerb(KovolVerb):
 
 class HansenPredictedKovolVerb(PredictedKovolVerb):
     """Class to replace the standard method of predicting verbs with the Hansen alternative."""
+
     def __init__(self, future_3p, english=""):
         super(PredictedKovolVerb, self).__init__(future1s="", english=english)
         self.future_3p = future_3p
@@ -616,17 +610,17 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
                     ] = self.root.replace("ɛ", "a")
                     roots["2s"] = self.root.replace("ɛ", "o")
                     suffixes = {
-                            "1s": "agam",
-                            "2s": "ogoŋ",
-                            "3s": "aga",
-                            "1p": "aŋg",
-                            "2p": "agama",
-                            "3p": "agand",
-                        }
+                        "1s": "agam",
+                        "2s": "ogoŋ",
+                        "3s": "aga",
+                        "1p": "aŋg",
+                        "2p": "agama",
+                        "3p": "agand",
+                    }
             else:
-                roots["1s"] = roots["2s"] = roots["1p"] = roots["3p"] = self.root.replace(
-                    "ɛ", "o"
-                )
+                roots["1s"] = roots["2s"] = roots["1p"] = roots[
+                    "3p"
+                ] = self.root.replace("ɛ", "o")
                 roots["2p"] = self.root.replace("ɛ", "a")
 
         elif last_vowel == "u":

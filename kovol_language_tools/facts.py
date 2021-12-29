@@ -1,6 +1,6 @@
 # Store Kovol language facts useful for different modules here
 
-phonetic_consonants = [
+phonetic_consonants = (
     "p",
     "t",
     "k",
@@ -17,12 +17,12 @@ phonetic_consonants = [
     "l",
     "w",
     "j",
-]
+)
 
 # include both ɑ and a to catch spelling inconsistencies.
-phonetic_vowels = ["i", "ɪ", "e", "ɛ", "u", "o", "ɔ", "ɑ", "a"]
+phonetic_vowels = ("i", "ɪ", "e", "ɛ", "u", "o", "ɔ", "ɑ", "a")
 
-phonetic_glides = ["ɑⁱ", "aⁱ", "eⁱ", "oᵘ"]
+phonetic_glides = ("ɑⁱ", "aⁱ", "eⁱ", "oᵘ")
 
 # list of punctuation and whitespace that modules will ignore.
-other_valid_characters = [" "]
+other_valid_characters = (" ",)

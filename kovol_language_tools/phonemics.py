@@ -10,6 +10,7 @@ valid_characters = (
     + facts.phonetic_glides
     + facts.other_valid_characters
 )
+
 vv = re.compile("[{v}][{v}]".format(v="".join(facts.phonetic_vowels)))
 
 ccc = re.compile("[{c}][{c}][{c}]".format(c="".join(facts.phonetic_consonants)))
