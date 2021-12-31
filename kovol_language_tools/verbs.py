@@ -105,6 +105,8 @@ class KovolVerb:
     those conjugations and printing to screen."""
 
     vowels = phonetic_vowels  # Vowels in Kovol language
+    actors = ("1s", "2s", "3s", "1p", "2p", "3p")
+    tenses = ("remote_past", "recent_past", "future")
 
     def __init__(self, future1s: str, english: str):
         # Meta data
@@ -115,29 +117,12 @@ class KovolVerb:
         self.errors = []  # used for PredictedVerb subclass,
         # defined here to maintain template compatibility
 
-        # Remote past tense
-        self.remote_past_1s = ""
-        self.remote_past_2s = ""
-        self.remote_past_3s = ""
-        self.remote_past_1p = ""
-        self.remote_past_2p = ""
-        self.remote_past_3p = ""
+        # Set a blank string for actor/tense combinations
+        for t in self.tenses:
+            for a in self.actors:
+                setattr(self, f"{t}_{a}", "")
 
-        # Recent past tense
-        self.recent_past_1s = ""
-        self.recent_past_2s = ""
-        self.recent_past_3s = ""
-        self.recent_past_1p = ""
-        self.recent_past_2p = ""
-        self.recent_past_3p = ""
-
-        # Future tense
         self.future_1s = future1s
-        self.future_2s = ""
-        self.future_3s = ""
-        self.future_1p = ""
-        self.future_2p = ""
-        self.future_3p = ""
 
         # Imperative forms
         self.singular_imperative = ""
@@ -336,37 +321,52 @@ class PredictedKovolVerb(KovolVerb):
         The two stages are:
         1. figure out suffixes to use
         2. add them to root."""
+        root = self.root
+
         # 1.
-        if self.root[-1] == "a":
+        if self.get_last_root_character() == "a":
             # "a" causes assimilation
-            suffixes = ["anim", "aniŋ", "aŋ", "ug", "wa", "is"]
-        elif self.root[-1] == "l":
+            suffixes = {
+                "1s": "anim",
+                "2s": "aniŋ",
+                "3s": "aŋ",
+                "1p": "ug",
+                "2p": "wa",
+                "3p": "is",
+            }
+        elif self.get_last_root_character() == "l":
             # special rule, roots ending in "l" have unique suffixes and vowel replacement
-            suffixes = ["ɛnim", "ɛniŋ", "aŋ", "olug", "wa", "ɛlis"]
+            suffixes = {
+                "1s": "ɛnim",
+                "2s": "ɛniŋ",
+                "3s": "aŋ",
+                "1p": "olug",
+                "2p": "wa",
+                "3p": "ɛlis",
+            }
         else:
             # standard suffixes
-            suffixes = ["inim", "iniŋ", "iŋ", "ug", "wa", "is"]
+            suffixes = {
+                "1s": "inim",
+                "2s": "iniŋ",
+                "3s": "iŋ",
+                "1p": "ug",
+                "2p": "wa",
+                "3p": "is",
+            }
 
         # 2.
-        if self.root[-1] == "l":
+        if self.get_last_root_character() == "l":
             # special rule, "l" vowel replacement
-            future_tense = [self.root[:-2] + sfx for sfx in suffixes]
+            root = self.root[:-2]
         elif self.root_ending() == "V":
             # roots ending in V reduce
-            future_tense = [self.root[:-1] + sfx for sfx in suffixes]
-        else:
-            # roots ending in C just add suffix to root
-            future_tense = [self.root + sfx for sfx in suffixes]
-        # no assimilation or reduction for future 2p "-wa"
-        future_tense[4] = self.root + suffixes[4]
+            root = self.root[:-1]
 
-        # Assign attributes
-        self.future_1s = future_tense[0]
-        self.future_2s = future_tense[1]
-        self.future_3s = future_tense[2]
-        self.future_1p = future_tense[3]
-        self.future_2p = future_tense[4]
-        self.future_3p = future_tense[5]
+        for a in self.actors:
+            setattr(self, f"future_{a}", root + suffixes[a])
+        # no modification to 2sf
+        setattr(self, "future_2s", self.root + suffixes["2s"])
 
     def predict_recent_past_tense(self) -> None:
         """Assign recent past tense attributes. Called during __init__.
@@ -571,12 +571,8 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
         elif last_vowel == "u":
             suffixes = {k: v.replace("o", "u") for (k, v) in suffixes.items()}
 
-        self.remote_past_1s = root + suffixes["1s"]
-        self.remote_past_2s = root + suffixes["2s"]
-        self.remote_past_3s = root + suffixes["3s"]
-        self.remote_past_1p = root + suffixes["1p"]
-        self.remote_past_2p = root + suffixes["2p"]
-        self.remote_past_3p = root + suffixes["3p"]
+        for a in self.actors:
+            setattr(self, f"remote_past_{a}", root + suffixes[a])
 
     def predict_recent_past_tense(self):
         suffixes = {
