@@ -161,7 +161,11 @@ class KovolVerb:
 
     def verb_vowels(self) -> str:
         """Returns a string containing just the vowels of the root."""
-        v = [c for c in self.root if c in self.vowels]
+        try:
+            v = [c for c in self.root if c in self.vowels]
+        except AttributeError:
+            self.predict_root()
+            v = [c for c in self.root if c in self.vowels]
         v = "".join(v)
         return v
 
@@ -190,6 +194,9 @@ class KovolVerb:
             return self.root[-1]
         except IndexError:
             return None
+        except AttributeError:
+            self.predict_root()
+            return self.root[-1]
 
     def get_last_two_root_characters(self) -> str or None:
         """Returns the last two characters of the root, or None"""
@@ -197,42 +204,21 @@ class KovolVerb:
             return self.root[-2:]
         except IndexError:
             return None
+        except AttributeError:
+            self.predict_root()
+            return self.root[-2:]
 
     def get_remote_past_tense(self) -> tuple:
         """Return a tuple of remote past conjugations."""
-        remote_past_tense = (
-            self.remote_past_1s,
-            self.remote_past_2s,
-            self.remote_past_3s,
-            self.remote_past_1p,
-            self.remote_past_2p,
-            self.remote_past_3p,
-        )
-        return remote_past_tense
+        return tuple([getattr(self, f"remote_past_{a}") for a in self.actors])
 
     def get_recent_past_tense(self) -> None:
         """Return a tuple of recent past tense conjugations."""
-        recent_past_tense = (
-            self.recent_past_1s,
-            self.recent_past_2s,
-            self.recent_past_3s,
-            self.recent_past_1p,
-            self.recent_past_2p,
-            self.recent_past_3p,
-        )
-        return recent_past_tense
+        return tuple([getattr(self, f"recent_past_{a}") for a in self.actors])
 
     def get_future_tense(self) -> tuple:
         """Return a tuple of future tense conjugations."""
-        future_tense = (
-            self.future_1s,
-            self.future_2s,
-            self.future_3s,
-            self.future_1p,
-            self.future_2p,
-            self.future_3p,
-        )
-        return future_tense
+        return tuple([getattr(self, f"future_{a}") for a in self.actors])
 
     def get_imperatives(self) -> tuple:
         """Return a tuple of imperative conjugations."""
