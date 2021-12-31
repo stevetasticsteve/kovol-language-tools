@@ -1,8 +1,8 @@
-from kovol_language_tools.verbs import KovolVerb as KV
-from kovol_language_tools.verbs import get_data_from_csv
+# tests for csv reader, KovolVerb and PredictedVerb
 
+from kovol_language_tools.verbs.kovol_verb import KovolVerb as KV
+from kovol_language_tools.verbs.csv_reader import get_data_from_csv
 test_csv = "tests/test_data.csv"
-
 
 def test_get_data_from_csv():
     data = get_data_from_csv(test_csv)
@@ -148,3 +148,4 @@ def test_get_future_tense():
         "pigwa ig",
         "pigis",
     )
+
