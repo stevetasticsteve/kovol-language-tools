@@ -74,8 +74,9 @@ Predictions generated from 3PF
   - 1s suffix = "inim"
   - 2s suffix = "iniŋ"
 - elif last 2 characters are "ɛl"
-  - shorten suffixes by removing 2 initial characters in 1s, 2s
+  - shorten root by removing 2 initial characters in 1s, 2s, 3s
   - 3s suffix = "aŋ"
+  - replace "ɛ" with "o" in 1p and 2p root
 - elif last vowel = "ɛ"
   - replace "ɛ" with "o" in 1p and 2p root
 
