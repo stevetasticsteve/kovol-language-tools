@@ -605,10 +605,10 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
                         "3p": "ugand",
                     }
                 else:
-                    roots["1s"] = roots["3s"] = roots["1p"] = roots["2p"] = roots[
-                        "3p"
-                    ] = self.root.replace("ɛ", "a")
-                    roots["2s"] = self.root.replace("ɛ", "o")
+                    for r in ("1s", "3s", "1p", "2p", "3p"):
+                        roots[r] = roots[r].replace("ɛ", "a")
+                    roots["2s"] = roots["2s"].replace("ɛ", "o")
+
                     suffixes = {
                         "1s": "agam",
                         "2s": "ogoŋ",
@@ -618,9 +618,8 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
                         "3p": "agand",
                     }
             else:
-                roots["1s"] = roots["2s"] = roots["1p"] = roots[
-                    "3p"
-                ] = self.root.replace("ɛ", "o")
+                for r in ("1s", "2s", "1p", "3p"):
+                    roots[r] = roots[r].replace("ɛ", "o")
                 roots["2p"] = self.root.replace("ɛ", "a")
 
         elif last_vowel == "u":
