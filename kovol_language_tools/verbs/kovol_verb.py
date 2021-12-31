@@ -206,8 +206,11 @@ class PredictedVerb(KovolVerb):
         Also asigns this return value to self.errors."""
         diff = {}
         # explicitly define order of conjugations
-        order = [f"{t}_{a}" for t in self.tenses for a in self.actors] + ["singular_imperative", "plural_imperative"]
-       
+        order = [f"{t}_{a}" for t in self.tenses for a in self.actors] + [
+            "singular_imperative",
+            "plural_imperative",
+        ]
+
         predicted = self.get_all_conjugations()
         actual = kovol_verb.get_all_conjugations()
 
