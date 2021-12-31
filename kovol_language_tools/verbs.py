@@ -158,10 +158,10 @@ class KovolVerb:
         """Get an up to date string representation."""
         return {"future_1s": self.future_1s, "english": self.english}
 
-    def predict_root(self, rules="steve") -> str:
+    def predict_root(self, rules="stanley") -> str:
         """Find the verb root. Can take a keyword argument to change how it's predicted."""
 
-        if rules == "philip":
+        if rules == "hansen":
             self.root = self.future_3p[:-2]
         else:
             remote_past_tense = self.remote_past_1s[0:-2]  # strip -om
@@ -545,7 +545,7 @@ class HansenPredictedKovolVerb(PredictedKovolVerb):
     def __init__(self, future_3p, english=""):
         super(PredictedKovolVerb, self).__init__(future1s="", english=english)
         self.future_3p = future_3p
-        self.predict_root(rules="philip")
+        self.predict_root(rules="hansen")
         self.predict_verb()
 
     def predict_remote_past_tense(self):
