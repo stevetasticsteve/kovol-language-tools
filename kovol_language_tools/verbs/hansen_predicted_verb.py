@@ -121,13 +121,10 @@ class HansenPredictedVerb(PredictedVerb):
         elif last_character == "g":
             suffixes = {k: v[2:] for (k, v) in suffixes.items()}
             suffixes["1p"] = "oŋg"
+        
+        for a in self.actors:
+            setattr(self, f"recent_past_{a}", roots[a] + suffixes[a])
 
-        self.recent_past_1s = roots["1s"] + suffixes["1s"]
-        self.recent_past_2s = roots["2s"] + suffixes["2s"]
-        self.recent_past_3s = roots["3s"] + suffixes["3s"]
-        self.recent_past_1p = roots["1p"] + suffixes["1p"]
-        self.recent_past_2p = roots["2p"] + suffixes["2p"]
-        self.recent_past_3p = roots["3p"] + suffixes["3p"]
 
     def predict_future_tense(self):
         suffixes = {
@@ -153,13 +150,10 @@ class HansenPredictedVerb(PredictedVerb):
         elif last_vowel == "ɛ":
             roots["1p"] = roots["2p"] = self.root.replace("ɛ", "o")
 
-        self.future_1s = roots["1s"] + suffixes["1s"]
-        self.future_2s = roots["2s"] + suffixes["2s"]
-        self.future_3s = roots["3s"] + suffixes["3s"]
-        self.future_1p = roots["1p"] + suffixes["1p"]
-        self.future_2p = roots["2p"] + suffixes["2p"]
-        # self.future_3p = roots["3p"] + suffixes["3p"]
-        # 3PF given as starting data
+        
+        for a in self.actors:
+            setattr(self, f"future_{a}", roots[a] + suffixes[a])
+
 
     def predict_imperative(self):
         suffixes = {"sing_imp": "ɛ", "pl_imp": "as"}
