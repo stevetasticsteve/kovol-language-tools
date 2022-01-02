@@ -121,10 +121,9 @@ class HansenPredictedVerb(PredictedVerb):
         elif last_character == "g":
             suffixes = {k: v[2:] for (k, v) in suffixes.items()}
             suffixes["1p"] = "oŋg"
-        
+
         for a in self.actors:
             setattr(self, f"recent_past_{a}", roots[a] + suffixes[a])
-
 
     def predict_future_tense(self):
         suffixes = {
@@ -150,10 +149,8 @@ class HansenPredictedVerb(PredictedVerb):
         elif last_vowel == "ɛ":
             roots["1p"] = roots["2p"] = self.root.replace("ɛ", "o")
 
-        
         for a in self.actors:
             setattr(self, f"future_{a}", roots[a] + suffixes[a])
-
 
     def predict_imperative(self):
         suffixes = {"sing_imp": "ɛ", "pl_imp": "as"}

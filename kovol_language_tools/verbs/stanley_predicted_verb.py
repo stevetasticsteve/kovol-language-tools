@@ -3,6 +3,7 @@ from kovol_language_tools.verbs.kovol_verb import PredictedVerb
 
 class StanleyPredictedVerb(PredictedVerb):
     """Initialise a verb with the remote past 1s and recent past 1s and predict an entire paradigm from that."""
+
     def __init__(self, remote_past_1s: str, recent_past_1s: str, english=""):
         super().__init__(
             future1s="", english=english
@@ -17,13 +18,13 @@ class StanleyPredictedVerb(PredictedVerb):
         """Assign future tense attributes. Called during __init__"""
         root = self.root
         suffixes = {
-                "1s": "inim",
-                "2s": "iniŋ",
-                "3s": "iŋ",
-                "1p": "ug",
-                "2p": "wa",
-                "3p": "is",
-            }
+            "1s": "inim",
+            "2s": "iniŋ",
+            "3s": "iŋ",
+            "1p": "ug",
+            "2p": "wa",
+            "3p": "is",
+        }
 
         # 1.
         if self.get_last_root_character() == "a":
@@ -56,13 +57,13 @@ class StanleyPredictedVerb(PredictedVerb):
         """Assign recent past tense attributes. Called during __init__."""
         root = root_1p = self.root
         suffixes = {
-                "1s": "gɔm",
-                "2s": "gɔŋ",
-                "3s": "ge",
-                "1p": "ɔŋg",
-                "2p": "gɔma",
-                "3p": "gɔnd",
-            }
+            "1s": "gɔm",
+            "2s": "gɔŋ",
+            "3s": "ge",
+            "1p": "ɔŋg",
+            "2p": "gɔma",
+            "3p": "gɔnd",
+        }
 
         if (
             self.get_last_root_character() == "u"
@@ -76,7 +77,10 @@ class StanleyPredictedVerb(PredictedVerb):
             # "i" causes assimilation, stretches over morpheme boundary
             suffixes["2p"] = "gima"
 
-        elif self.get_last_root_character() == "a" or self.get_last_root_character() == "l":
+        elif (
+            self.get_last_root_character() == "a"
+            or self.get_last_root_character() == "l"
+        ):
             # "a" causes assimilation
             suffixes = {
                 "1s": "gam",
@@ -122,13 +126,13 @@ class StanleyPredictedVerb(PredictedVerb):
         """Assign remote past tense attributes. Called during __init__"""
         root = self.root
         suffixes = {
-                "1s": "ɔm",
-                "2s": "ɔŋ",
-                "3s": "ɔt",
-                "1p": "omuŋg",
-                "2p": "omwa",
-                "3p": "ɛmind",
-            }
+            "1s": "ɔm",
+            "2s": "ɔŋ",
+            "3s": "ɔt",
+            "1p": "omuŋg",
+            "2p": "omwa",
+            "3p": "ɛmind",
+        }
 
         # 'u' in the root can cause assimilation
         if self.get_last_root_character() == "u":
